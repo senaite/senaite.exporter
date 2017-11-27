@@ -138,4 +138,5 @@ class ListExporter(BrowserView):
         """
         export_selection = self.request.form.get('exporter-selection', None)
         if export_selection == 'csv_whole_list':
-            self.view_instance.pagesize = 0
+            # TODO: Is there another way to set page-seize as infinite?
+            self.view_instance.pagesize = 999999
