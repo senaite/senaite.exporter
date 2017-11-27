@@ -31,7 +31,6 @@ class ListsExporter(object):
 
         return self.template()
 
-
     def get_pagesize(self):
         """
         Retrieves the current page size used to display the list.
