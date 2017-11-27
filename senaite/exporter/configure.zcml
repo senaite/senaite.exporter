@@ -1,0 +1,22 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:five="http://namespaces.zope.org/five"
+
+    i18n_domain="senaite">
+
+    <five:registerPackage package="." initialize=".initialize"/>
+
+    <!-- include packages -->
+    <include package=".browser" />
+
+    <!-- Exporters -->
+    <browser:page
+      for="*"
+      name="export_list"
+      class="senaite.exporter.list_exporters.ListExporter"
+      permission="zope2.View"
+      layer="bika.lims.interfaces.IBikaLIMS"
+    />
+
+</configure>

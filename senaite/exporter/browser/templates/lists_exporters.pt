@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<form
+  name="lists-exporter"
+  method="post"
+  action="export_list">
+
+  <!-- Search criteria saved in input -->
+  <input id="search-pagesize" type="hidden" name="search-pagesize"
+    tal:attributes="value python:view.get_pagesize()"/>
+  <input id="view-class-id" type="hidden" name="view-class-id"
+    tal:attributes="value python:view.get_class_view_id()"/>
+
+  <label for="exporter-selection">Export list to:</label>
+  <!-- Export format and type -->
+    <select name="exporter-selection" id="exporter-selection">
+        <option value=""></option>
+        <option value="csv_current_list">CSV - Only displayed items</option>
+        <option value="csv_whole_list">CSV - Even not displayed <items></items></option>
+    </select>
+
+  <!-- Submit button -->
+  <input type="submit" name="export-list-submission" value="Export">
+</form>
+</html>

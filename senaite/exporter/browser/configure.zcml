@@ -1,0 +1,12 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+    <adapter
+      factory=".views.ListsExporter"
+      for="*"
+      provides="bika.lims.interfaces.ITopLeftListingHook"
+      name="lists_exporter"
+    />
+
+</configure>
