@@ -2,6 +2,9 @@
 #
 # Copyright 2017-2017 SENAITE
 
+import StringIO
+import csv
+
 
 def get_strings(data):
     """
@@ -67,3 +70,21 @@ def build_header(columns_def, columns_order, visible_columns):
         if col_def is not None:
             header.append(col_def.get('title', ''))
     return header
+
+
+def generate_csv(data):
+    """
+    Generates a CSV file from 'data'.
+    :param data: A list of lists where the first line is the header
+    data and the following ones are each data line.
+    :param file_name: The name for the resulting file *without* extension.
+
+    :return: A StringIO object.
+    """
+    output = StringIO.StringIO()
+    csv_writer = csv.writer(output, dialect=csv.excel)
+    csv_writer.writerows(data)
+    result = output.getvalue()
+    output.close()
+    return result
+

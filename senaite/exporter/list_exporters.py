@@ -2,11 +2,13 @@
 #
 # Copyright 2017-2017 SENAITE
 
+import datetime
 import json
 
 import plone
 from senaite.exporter.utils import build_header
 from senaite.exporter.utils import build_line
+from senaite.exporter.utils import generate_csv
 from senaite.exporter.utils import get_strings
 
 from bika.lims.browser import BrowserView
@@ -21,6 +23,8 @@ class ListExporter(BrowserView):
         super(BrowserView, self).__init__(context, request)
         self.view_instance = None
         self.items_list = None
+        self.result_file = None
+        self.file_name = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 
     def __call__(self):
         plone.protect.CheckAuthenticator(self.request.form)
@@ -43,7 +47,18 @@ class ListExporter(BrowserView):
         self.view_instance = list_view_class(self.context, self.request)
         # Getting all items as list of lists
         self.items_list = self.export_to_list()
-        import pdb;pdb.set_trace()
+        if export_format == 'csv_whole_list':
+            self.file_name += '.csv'
+            self.result_file = generate_csv(self.items_list)
+
+        # Stream file to browser
+        setheader = self.request.RESPONSE.setHeader
+        setheader('Content-Length', len(self.result_file))
+        setheader('Content-Type', 'text/comma-separated-values')
+        setheader(
+            'Content-Disposition', 'inline; filename=%s' % self.file_name)
+        # Send file
+        self.request.RESPONSE.write(self.result_file)
 
     def get_view_object(self, class_view_id):
         """
