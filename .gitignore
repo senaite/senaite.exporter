@@ -1,0 +1,12 @@
+bin/
+develop-eggs
+eggs/
+.mr.developer.cfg
+src/bika.lims
+parts
+.installed.cfg
+.coverage
+htmlcov
+dist
+*.pyc
+*egg-info
