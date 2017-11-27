@@ -122,7 +122,20 @@ class ListExporter(BrowserView):
         self.view_instance.save_filter_bar_values(cookie_data)
         self.view_instance.printwfenabled = \
             self.context.bika_setup.getPrintingWorkflowEnabled()
+
+        self._apply_specific_conditions()
+
         self.view_instance._process_request()
 
         # Getting all items
         return self.view_instance.folderitems()
+
+    def _apply_specific_conditions(self):
+        """
+        Apply specific condition from request.
+        Modifications for filter paters should be placed here!
+        :return: None
+        """
+        export_selection = self.request.form.get('exporter-selection', None)
+        if export_selection == 'csv_whole_list':
+            self.view_instance.pagesize = 0
