@@ -77,7 +77,6 @@ def generate_csv(data):
     Generates a CSV file from 'data'.
     :param data: A list of lists where the first line is the header
     data and the following ones are each data line.
-    :param file_name: The name for the resulting file *without* extension.
 
     :return: A StringIO object.
     """
