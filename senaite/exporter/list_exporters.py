@@ -47,10 +47,11 @@ class ListExporter(BrowserView):
         self.view_instance = list_view_class(self.context, self.request)
         # Getting all items as list of lists
         self.items_list = self.export_to_list()
-        if export_format == 'csv_whole_list':
+        if export_format in ['csv_whole_list', 'csv_current_list']:
             self.file_name += '.csv'
             self.result_file = generate_csv(self.items_list)
-
+        if self.result_file is None:
+            return
         # Stream file to browser
         setheader = self.request.RESPONSE.setHeader
         setheader('Content-Length', len(self.result_file))
