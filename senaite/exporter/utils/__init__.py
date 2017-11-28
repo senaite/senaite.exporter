@@ -3,10 +3,8 @@
 # Copyright 2017-2017 SENAITE
 
 import StringIO
-import sys
 import csv
 import xml.etree.ElementTree as ET
-from xml.dom import minidom
 
 
 def get_strings(data):
@@ -100,7 +98,7 @@ def generate_xml(data):
     :return: A string object.
     """
     output = StringIO.StringIO()
-    columns = data[0]
+    columns = remove_blanks(data[0])
     rows = data[1:]
     # Creating root xml element
     root = ET.Element("list")
@@ -121,12 +119,17 @@ def generate_xml(data):
     return result
 
 
-def prettify(elem):
+def remove_blanks(list_obj):
     """
-    Return a pretty-printed XML string for the Element.
-
-    :param elem: ElementTree object
+    Removes spaces and empty strings in strings from a list.
+    :param list_obj: A list of strings
+    :return: a list of strings
     """
-    rough_string = ET.tostring(elem, 'utf-8')
-    reparsed = minidom.parseString(rough_string)
-    return reparsed.toprettyxml(indent="  ")
+    output = []
+    for element in list_obj:
+        if not element:
+            element = '_'
+        else:
+            element = element.replace(' ', '_')
+        output.append(element)
+    return output

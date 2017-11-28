@@ -26,6 +26,7 @@ class ListExporter(BrowserView):
         self.view_instance = None
         self.items_list = None
         self.result_file = None
+        self.export_format = None
         self.file_name = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 
     def __call__(self):
@@ -35,8 +36,8 @@ class ListExporter(BrowserView):
         if not submitted:
             return None
 
-        export_format = self.request.form.get('exporter-selection', None)
-        if not export_format:
+        self.export_format = self.request.form.get('exporter-selection', None)
+        if not self.export_format:
             return None
 
         view_class_id = json.loads(
@@ -53,16 +54,16 @@ class ListExporter(BrowserView):
         # Setting header
         setheader = self.request.RESPONSE.setHeader
 
-        # Generating files:
+        # Generating files
         # CSV
-        if export_format in ['csv_whole_list', 'csv_current_list']:
+        if self.export_format in ['csv_whole_list', 'csv_current_list']:
             self.file_name += '.csv'
             self.result_file = generate_csv(self.items_list)
             # Setting headers for result
             setheader('Content-Type', 'text/comma-separated-values')
 
         # XML
-        if export_format in ['xml_whole_list', 'xml_current_list']:
+        if self.export_format in ['xml_whole_list', 'xml_current_list']:
             self.file_name += '.xml'
             self.result_file = generate_xml(self.items_list)
             # Setting headers for result
@@ -71,7 +72,7 @@ class ListExporter(BrowserView):
         if self.result_file is None:
             logger.info(
                 "Generated file from format {} is None."
-                .format(export_format))
+                .format(self.export_format))
             return
 
         setheader('Content-Length', len(self.result_file))
@@ -108,6 +109,10 @@ class ListExporter(BrowserView):
         form_id = self.view_instance.form_id
         review_state = self.request.get(form_id + '_review_state', 'default')
 
+        avoid_void_cols = self.export_format in [
+            'xml_whole_list',
+            'xml_current_list']
+
         # Getting columns for review_state
         columns_order = []
         for dic in review_states:
@@ -116,12 +121,24 @@ class ListExporter(BrowserView):
                 break
         visible_columns = self.view_instance.get_toggle_cols()
 
+        # Columns without title will not be included in the final file when
+        # exporting to formats such as XML.
+        if avoid_void_cols:
+            visible_columns_tmp = []
+            for col in visible_columns:
+                col_def = columns_map.get(col, {})
+                title = col_def.get('title', '')
+                if title:
+                    visible_columns_tmp.append(col)
+            visible_columns = visible_columns_tmp
+
         # Getting items
         items = self.get_items()
 
         # building the list of lists
         for item in items:
-            lines.append(build_line(item, columns_order, visible_columns))
+            lines.append(
+                build_line(item, columns_order, visible_columns))
         header = build_header(columns_map, columns_order, visible_columns)
         return [header] + lines
 
