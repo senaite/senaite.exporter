@@ -10,6 +10,8 @@ from senaite.exporter.utils import build_header
 from senaite.exporter.utils import build_line
 from senaite.exporter.utils import generate_csv
 from senaite.exporter.utils import get_strings
+from senaite.exporter.utils import generate_xml
+from senaite.exporter import logger
 
 from bika.lims.browser import BrowserView
 
@@ -47,19 +49,45 @@ class ListExporter(BrowserView):
         self.view_instance = list_view_class(self.context, self.request)
         # Getting all items as list of lists
         self.items_list = self.export_to_list()
+
+        # Setting header
+        setheader = self.request.RESPONSE.setHeader
+
+        # Generating files
+        # CSV
         if export_format in ['csv_whole_list', 'csv_current_list']:
             self.file_name += '.csv'
             self.result_file = generate_csv(self.items_list)
+            # Setting headers for result
+            setheader('Content-Type', 'text/comma-separated-values')
+            setheader('Content-Length', len(self.result_file))
+            setheader(
+                'Content-Disposition',
+                'inline; filename=%s'
+                % self.file_name)
+            self.request.RESPONSE.write(self.result_file)
+        # XML
+        if export_format in ['xml_whole_list', 'xml_current_list']:
+            self.file_name += '.xml'
+            self.result_file = generate_xml(self.items_list, self.file_name)
+            # Setting headers for result
+            setheader('Content-Type', 'application/xml')
+            stream_data = open(self.result_file.name, "rb").read()
+            setheader('Content-Length', len(stream_data))
+            # Stream file to browser
+            setheader(
+                'Content-Disposition',
+                'attachment; filename=%s'
+                % self.file_name)
+            # Send file
+            self.request.RESPONSE.write(stream_data)
+
         if self.result_file is None:
+            logger.info(
+                "Generated file from format {} is None."
+                .format(export_format))
             return
-        # Stream file to browser
-        setheader = self.request.RESPONSE.setHeader
-        setheader('Content-Length', len(self.result_file))
-        setheader('Content-Type', 'text/comma-separated-values')
-        setheader(
-            'Content-Disposition', 'inline; filename=%s' % self.file_name)
-        # Send file
-        self.request.RESPONSE.write(self.result_file)
+
 
     def get_view_object(self, class_view_id):
         """
@@ -138,6 +166,6 @@ class ListExporter(BrowserView):
         :return: None
         """
         export_selection = self.request.form.get('exporter-selection', None)
-        if export_selection == 'csv_whole_list':
+        if export_selection in ['csv_whole_list', 'xml_whole_list']:
             # TODO: Is there another way to set page-seize as infinite?
             self.view_instance.pagesize = 999999

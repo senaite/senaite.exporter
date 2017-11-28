@@ -45,5 +45,9 @@ class ListsExporter(object):
 
         :return: json string module name
         """
+        # If I use 'self.bika_listing.implemented.__name__' here, I get
+        # 'Products.Five.metaclass.AnalysisRequestsView' instead of
+        # 'bika.lims.browser.analysisrequest.analysisrequests
+        # .AnalysisRequestsView'. I don't understand why this happens.
         implemented_name = self.bika_listing.implemented.__name__
         return json.dumps(implemented_name)

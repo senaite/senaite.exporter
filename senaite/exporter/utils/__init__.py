@@ -3,7 +3,10 @@
 # Copyright 2017-2017 SENAITE
 
 import StringIO
+import sys
 import csv
+import xml.etree.ElementTree as ET
+from xml.dom import minidom
 
 
 def get_strings(data):
@@ -87,3 +90,43 @@ def generate_csv(data):
     output.close()
     return result
 
+
+def generate_xml(data, filename):
+    """
+    Generates a XML file from 'data'.
+    :param data: A list of lists where the first line is the header
+    data and the following ones are each data line.
+    :param filename: The file name ith extension.
+
+    :return: An opened file object.
+    """
+    file_obj = open(filename, 'wb')
+    columns = data[0]
+    rows = data[1:]
+    # Creating root xml element
+    root = ET.Element("list")
+    # Filling root with rows
+    for row in rows:
+        sub_element = ET.SubElement(root, 'row')
+        # Each row contain columns
+        i = 0
+        for col in row:
+            col_element = ET.Element(columns[i])
+            col_element.text = col
+            sub_element.append(col_element)
+            i += 1
+    tree = ET.ElementTree(root)
+    tree.write(file_obj, xml_declaration=True, encoding='utf-8')
+    file_obj.close()
+    return file_obj
+
+
+def prettify(elem):
+    """
+    Return a pretty-printed XML string for the Element.
+
+    :param elem: ElementTree object
+    """
+    rough_string = ET.tostring(elem, 'utf-8')
+    reparsed = minidom.parseString(rough_string)
+    return reparsed.toprettyxml(indent="  ")
