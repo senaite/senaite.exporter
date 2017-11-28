@@ -81,7 +81,7 @@ def generate_csv(data):
     :param data: A list of lists where the first line is the header
     data and the following ones are each data line.
 
-    :return: A StringIO object.
+    :return: A String object.
     """
     output = StringIO.StringIO()
     csv_writer = csv.writer(output, dialect=csv.excel)
@@ -91,16 +91,15 @@ def generate_csv(data):
     return result
 
 
-def generate_xml(data, filename):
+def generate_xml(data):
     """
     Generates a XML file from 'data'.
     :param data: A list of lists where the first line is the header
     data and the following ones are each data line.
-    :param filename: The file name ith extension.
 
-    :return: An opened file object.
+    :return: A string object.
     """
-    file_obj = open(filename, 'wb')
+    output = StringIO.StringIO()
     columns = data[0]
     rows = data[1:]
     # Creating root xml element
@@ -116,9 +115,10 @@ def generate_xml(data, filename):
             sub_element.append(col_element)
             i += 1
     tree = ET.ElementTree(root)
-    tree.write(file_obj, xml_declaration=True, encoding='utf-8')
-    file_obj.close()
-    return file_obj
+    tree.write(output, xml_declaration=True, encoding='utf-8')
+    result = output.getvalue()
+    output.close()
+    return result
 
 
 def prettify(elem):

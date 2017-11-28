@@ -53,34 +53,20 @@ class ListExporter(BrowserView):
         # Setting header
         setheader = self.request.RESPONSE.setHeader
 
-        # Generating files
+        # Generating files:
         # CSV
         if export_format in ['csv_whole_list', 'csv_current_list']:
             self.file_name += '.csv'
             self.result_file = generate_csv(self.items_list)
             # Setting headers for result
             setheader('Content-Type', 'text/comma-separated-values')
-            setheader('Content-Length', len(self.result_file))
-            setheader(
-                'Content-Disposition',
-                'inline; filename=%s'
-                % self.file_name)
-            self.request.RESPONSE.write(self.result_file)
+
         # XML
         if export_format in ['xml_whole_list', 'xml_current_list']:
             self.file_name += '.xml'
-            self.result_file = generate_xml(self.items_list, self.file_name)
+            self.result_file = generate_xml(self.items_list)
             # Setting headers for result
             setheader('Content-Type', 'application/xml')
-            stream_data = open(self.result_file.name, "rb").read()
-            setheader('Content-Length', len(stream_data))
-            # Stream file to browser
-            setheader(
-                'Content-Disposition',
-                'attachment; filename=%s'
-                % self.file_name)
-            # Send file
-            self.request.RESPONSE.write(stream_data)
 
         if self.result_file is None:
             logger.info(
@@ -88,6 +74,14 @@ class ListExporter(BrowserView):
                 .format(export_format))
             return
 
+        setheader('Content-Length', len(self.result_file))
+        # Stream file to browser
+        setheader(
+            'Content-Disposition',
+            'attachment; filename=%s'
+            % self.file_name)
+        # Send file
+        self.request.RESPONSE.write(self.result_file)
 
     def get_view_object(self, class_view_id):
         """
