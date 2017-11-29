@@ -10,6 +10,7 @@ from senaite.exporter.utils import build_header
 from senaite.exporter.utils import build_line
 from senaite.exporter.utils import generate_csv
 from senaite.exporter.utils import get_strings
+from senaite.exporter.utils import get_view
 from senaite.exporter.utils import generate_xml
 from senaite.exporter import logger
 
@@ -36,20 +37,15 @@ class ListExporter(BrowserView):
         if not submitted:
             return None
 
-        self.export_format = self.request.form.get('exporter-selection', None)
+        self.export_format = get_strings(
+            self.request.form.get('exporter-selection', None))
         if not self.export_format:
             return None
 
-        view_class_id = json.loads(
-            self.request.form.get('view-class-id', None),
-            object_hook=get_strings)
-
-        # Getting view module
-        list_view_class = self.get_view_object(view_class_id)
         # Getting view instance
-        self.view_instance = list_view_class(self.context, self.request)
+        self.view_instance = self.get_view_instance()
         # Getting all items as list of lists
-        self.items_list = self.export_to_list()
+        self.items_list = get_strings(self.export_to_list())
 
         # Setting header
         setheader = self.request.RESPONSE.setHeader
@@ -84,16 +80,14 @@ class ListExporter(BrowserView):
         # Send file
         self.request.RESPONSE.write(self.result_file)
 
-    def get_view_object(self, class_view_id):
+    def get_view_instance(self,):
         """
         Gets current class view dynamically.
 
-        :param class_view_id: class view module name.
-        :return: object class not instantiated
+        :return: instanced class object
         """
-        module_id, class_id = class_view_id.rsplit('.', 1)
-        mod = __import__(module_id, fromlist=['class_id'])
-        return getattr(mod, class_id)
+        view_name = get_strings(self.request.form.get('view-name'))
+        return get_view(self.context, self.request, view_name)
 
     def export_to_list(self):
         """
@@ -107,7 +101,8 @@ class ListExporter(BrowserView):
         columns_map = self.view_instance.columns
         review_states = self.view_instance.review_states
         form_id = self.view_instance.form_id
-        review_state = self.request.get(form_id + '_review_state', 'default')
+        review_state = get_strings(
+            self.request.get(form_id + '_review_state', 'default'))
 
         avoid_void_cols = self.export_format in [
             'xml_whole_list',
@@ -137,8 +132,7 @@ class ListExporter(BrowserView):
 
         # building the list of lists
         for item in items:
-            lines.append(
-                build_line(item, columns_order, visible_columns))
+            lines.append(build_line(item, columns_order, visible_columns))
         header = build_header(columns_map, columns_order, visible_columns)
         return [header] + lines
 

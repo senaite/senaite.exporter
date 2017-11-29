@@ -5,6 +5,9 @@
 import StringIO
 import csv
 import xml.etree.ElementTree as ET
+from Acquisition import aq_inner
+
+from zope.component import getMultiAdapter
 
 
 def get_strings(data):
@@ -133,3 +136,21 @@ def remove_blanks(list_obj):
             element = element.replace(' ', '_')
         output.append(element)
     return output
+
+
+def get_view(context, request, name):
+    """
+    Accessing a view instance.
+
+    :param context: The context
+    :param request: A request object.
+    :param name: The view (adapter) name
+    :return:
+    """
+    # Remove the acquisition wrapper (prevent false context assumptions)
+    context = aq_inner(context)
+    # May raise ComponentLookUpError
+    view = getMultiAdapter((context, request), name=name)
+    # Add the view to the acquisition chain
+    view = view.__of__(context)
+    return view

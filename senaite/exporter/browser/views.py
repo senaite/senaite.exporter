@@ -39,15 +39,9 @@ class ListsExporter(object):
         """
         return json.dumps(self.pagesize)
 
-    def get_class_view_id(self):
+    def get_view_name(self):
         """
-        Retrieves the class view module name that renders the list.
-
-        :return: json string module name
+        Returns the vew name registered in ZCML
+        :return: The browser view name registered in ZCML
         """
-        # If I use 'self.bika_listing.implemented.__name__' here, I get
-        # 'Products.Five.metaclass.AnalysisRequestsView' instead of
-        # 'bika.lims.browser.analysisrequest.analysisrequests
-        # .AnalysisRequestsView'. I don't understand why this happens.
-        implemented_name = self.bika_listing.implemented.__name__
-        return json.dumps(implemented_name)
+        return self.bika_listing.__name__

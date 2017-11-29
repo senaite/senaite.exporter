@@ -8,8 +8,8 @@
   <!-- Search criteria saved in input -->
   <input id="search-pagesize" type="hidden" name="search-pagesize"
     tal:attributes="value python:view.get_pagesize()"/>
-  <input id="view-class-id" type="hidden" name="view-class-id"
-    tal:attributes="value python:view.get_class_view_id()"/>
+  <input id="view-name" type="hidden" name="view-name"
+    tal:attributes="value python:view.get_view_name()"/>
 
   <label for="exporter-selection">Export list to:</label>
   <!-- Export format and type -->
