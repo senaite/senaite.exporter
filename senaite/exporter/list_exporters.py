@@ -152,13 +152,13 @@ class ListExporter(BrowserView):
         for k, v in cookie_filter_bar:
             cookie_data[k] = v
 
-        # Setting filters and processes before getting final items
         self.view_instance.save_filter_bar_values(cookie_data)
         self.view_instance.printwfenabled = \
             self.context.bika_setup.getPrintingWorkflowEnabled()
 
+        # Setting filters and processes before getting final items
         self._apply_specific_conditions()
-
+        # Call list process
         self.view_instance._process_request()
 
         # Getting all items
@@ -166,11 +166,33 @@ class ListExporter(BrowserView):
 
     def _apply_specific_conditions(self):
         """
-        Apply specific condition from request.
-        Modifications for filter paters should be placed here!
-        :return: None
+        Apply specific condition to the request request.
+        Modifications for request filter patterns should be placed here!
         """
+        form_id = self.view_instance.form_id
         export_selection = self.request.form.get('exporter-selection', None)
+
+        # Setting page size
         if export_selection in ['csv_whole_list', 'xml_whole_list']:
             # TODO: Is there another way to set page-seize as infinite?
-            self.view_instance.pagesize = 999999
+            pagesize = 999999
+        else:
+            pagesize = self.request.get(form_id + '_pagesize', '')
+        if pagesize:
+            self.view_instance.request.set(
+                form_id + '_pagesize',
+                get_strings(json.loads(pagesize)))
+
+        # Setting review state filter
+        state = self.request.get('state-filter-backup', '')
+        if state:
+            self.view_instance.request.set(
+                form_id + '_review_state',
+                get_strings(json.loads(state)))
+
+        # Setting Plone filter
+        plone_filter = self.request.get('filter-backup', '')
+        if plone_filter:
+            self.view_instance.request.set(
+                form_id + '_filter',
+                get_strings(json.loads(plone_filter)))
