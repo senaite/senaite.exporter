@@ -7,4 +7,5 @@
 
   <p>Exporting tool for SENAITE to export information from lists.</p>
 
+*This add-on doesn't contain tests yet, so it might be unstable.
 </div>
