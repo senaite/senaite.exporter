@@ -7,5 +7,7 @@
 
   <p>Exporting tool for SENAITE to export information from lists.</p>
 
-*This add-on doesn't contain tests yet, so it might be unstable.
+  <p>* This add-on doesn't contain tests yet, so it might be unstable.</p>
+
+  <img src="static/example.png" alt="Example" height="100" />
 </div>
