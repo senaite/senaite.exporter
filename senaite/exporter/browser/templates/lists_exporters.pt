@@ -23,7 +23,7 @@
         <option value="csv_whole_list">CSV - Even not displayed</option>
         <option value="xml_current_list">XML - Only displayed items</option>
         <option value="xml_whole_list">
-          XML - Even not displayed
+          XML - Even not displayed items
         </option>
     </select>
 

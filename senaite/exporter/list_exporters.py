@@ -176,20 +176,19 @@ class ListExporter(BrowserView):
         # TODO: Is there another way to set page-seize as infinite?
         pagesize = 999999
         if export_selection not in ['csv_whole_list', 'xml_whole_list']:
-            pagesize = self.request.get(form_id + '_pagesize', '')
+            pagesize = self.request.form.get(form_id + '_pagesize', '')
             if pagesize:
                 pagesize = int(json.loads(pagesize))
         self.view_instance.request.set(form_id + '_pagesize', pagesize)
 
         # Setting review state filter
-        state = self.request.get('state-filter-backup', '')
+        state = self.request.form.get('state-filter-backup', '')
         if state:
-            self.view_instance.request.set(
-                form_id + '_review_state',
-                get_strings(json.loads(state)))
+            self.view_instance.request.form[form_id + '_review_state'] =\
+                get_strings(json.loads(state))
 
         # Setting Plone filter
-        plone_filter = self.request.get('filter-backup', '')
+        plone_filter = self.request.form.get('filter-backup', '')
         if plone_filter:
             self.view_instance.request.set(
                 form_id + '_filter',
