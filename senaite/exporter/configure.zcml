@@ -2,7 +2,7 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:five="http://namespaces.zope.org/five"
-
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="senaite">
 
     <five:registerPackage package="." initialize=".initialize"/>
@@ -16,7 +16,22 @@
       name="export_list"
       class="senaite.exporter.list_exporters.ListExporter"
       permission="zope2.View"
-      layer="bika.lims.interfaces.IBikaLIMS"
+      layer="senaite.exporter.interfaces.ISenaiteExporter"
     />
+
+    <!-- Installation Profile -->
+    <genericsetup:registerProfile
+      name="default"
+      title="SENAITE EXPORTER"
+      directory="profiles/default"
+      description="SENAITE EXPORTER Extension Profile"
+      provides="Products.GenericSetup.interfaces.EXTENSION"/>
+
+    <!-- Run Setup Script -->
+    <genericsetup:importStep
+      name="senaite.exporter.setupHandler"
+      title="SENAITE EXPORTER: Run Setup Handler"
+      description="Run various configuration actions"
+      handler="senaite.exporter.setuphandlers.setup_handler"/>
 
 </configure>

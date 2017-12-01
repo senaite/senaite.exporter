@@ -1,0 +1,15 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:cmf="http://namespaces.zope.org/cmf"
+    i18n_domain="senaite.exporter">
+
+  <!-- Zope 3 browser resources -->
+
+  <browser:resourceDirectory
+      name="senaite.exporter.js"
+      directory="js"
+      layer="senaite.exporter.interfaces.ISenaiteExporter"
+      />
+
+</configure>

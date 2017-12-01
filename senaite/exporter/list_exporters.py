@@ -143,19 +143,6 @@ class ListExporter(BrowserView):
 
         :return: A list of lists with all the listed values.
         """
-        # Filter bar data
-        cookie_filter_bar = self.request.get('bika_listing_filter_bar', '')
-        if cookie_filter_bar is not None and cookie_filter_bar != '':
-            cookie_filter_bar = json.loads(cookie_filter_bar)
-
-        cookie_data = {}
-        for k, v in cookie_filter_bar:
-            cookie_data[k] = v
-
-        self.view_instance.save_filter_bar_values(cookie_data)
-        self.view_instance.printwfenabled = \
-            self.context.bika_setup.getPrintingWorkflowEnabled()
-
         # Setting filters and processes before getting final items
         self._apply_specific_conditions()
         # Call list process
@@ -171,6 +158,20 @@ class ListExporter(BrowserView):
         """
         form_id = self.view_instance.form_id
         export_selection = self.request.form.get('exporter-selection', None)
+
+        # Filter bar data
+        cookie_filter_bar = self.request.get('bika_listing_filter_bar', '')
+
+        if cookie_filter_bar is not None and cookie_filter_bar != '':
+            cookie_filter_bar = json.loads(cookie_filter_bar)
+
+        cookie_data = {}
+        for k, v in cookie_filter_bar:
+            cookie_data[k] = v
+
+        self.view_instance.save_filter_bar_values(cookie_data)
+        self.view_instance.printwfenabled = \
+            self.context.bika_setup.getPrintingWorkflowEnabled()
 
         # Setting page size
         # TODO: Is there another way to set page-seize as infinite?
