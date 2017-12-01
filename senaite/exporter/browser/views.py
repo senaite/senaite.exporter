@@ -57,10 +57,3 @@ class ListsExporter(object):
         :return: The state filter value.
         """
         return json.dumps(self.state_filter)
-
-    def get_filter(self):
-        """
-        Return the filter values used in the request.
-        :return: The filter value.
-        """
-        return json.dumps(self.filter)

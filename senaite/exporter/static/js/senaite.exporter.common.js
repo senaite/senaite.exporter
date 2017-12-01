@@ -13,7 +13,11 @@ function export_submit_controller() {
     value as '1'.
     */
     $('input#export-list-submission-fake').bind('click', function () {
+            // Get Plone filter value and back it up.
+            var filter_val = $('.filter-search-input').val();
+            $('#filter-backup').val(filter_val);
             var form = $(this).closest("form");
+            // Submit value
             $('input#export-list-submission').val('1');
             $(form).submit();
     });

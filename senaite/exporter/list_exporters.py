@@ -191,6 +191,10 @@ class ListExporter(BrowserView):
         # Setting Plone filter
         plone_filter = self.request.form.get('filter-backup', '')
         if plone_filter:
+            try:
+                decoded = json.loads(plone_filter)
+            except ValueError:
+                decoded = plone_filter
             self.view_instance.request.set(
                 form_id + '_filter',
-                get_strings(json.loads(plone_filter)))
+                get_strings(decoded))
