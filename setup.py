@@ -15,7 +15,7 @@ setup(
                      "\n\n" +
                      "Authors and maintainers\n" +
                      "-----------------------\n\n" +
-                     "- Pau Soliva (RIDING BYTES) <psoliva@naralabs.com>",
+                     "- Pau Soliva (Naralabs) <psoliva@naralabs.com>",
     # Get more strings from
     # http://pypi.python.org/pypi?:action=list_classifiers
     classifiers=[
