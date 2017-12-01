@@ -9,6 +9,7 @@
 
     <!-- include packages -->
     <include package=".browser" />
+    <include package=".static" />
 
     <!-- Exporters -->
     <browser:page
