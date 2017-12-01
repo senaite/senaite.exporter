@@ -28,6 +28,15 @@
     </select>
 
   <!-- Submit button -->
-  <input type="submit" name="export-list-submission" value="Export">
+  <input
+      type="button"
+      id="export-list-submission-fake"
+      value="Export"
+  />
+  <input
+      type="hidden"
+      id="export-list-submission"
+      name="export-list-submission"
+      />
 </form>
 </html>
