@@ -160,16 +160,16 @@ class ListExporter(BrowserView):
         export_selection = self.request.form.get('exporter-selection', None)
 
         # Filter bar data
-        cookie_filter_bar = self.request.get('bika_listing_filter_bar', '')
+        filter_bar = self.request.get('filter-bar-backup', '')
+        filter_bar_decoded = {}
+        if filter_bar is not None and filter_bar:
+            try:
+                decoded = json.loads(filter_bar)
+            except ValueError:
+                decoded = filter_bar
+            filter_bar_decoded = get_strings(decoded)
 
-        if cookie_filter_bar is not None and cookie_filter_bar != '':
-            cookie_filter_bar = json.loads(cookie_filter_bar)
-
-        cookie_data = {}
-        for k, v in cookie_filter_bar:
-            cookie_data[k] = v
-
-        self.view_instance.save_filter_bar_values(cookie_data)
+        self.view_instance.save_filter_bar_values(filter_bar_decoded)
         self.view_instance.printwfenabled = \
             self.context.bika_setup.getPrintingWorkflowEnabled()
 

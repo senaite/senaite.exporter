@@ -13,13 +13,33 @@ function export_submit_controller() {
     value as '1'.
     */
     $('input#export-list-submission-fake').bind('click', function () {
-            // Get Plone filter value and back it up.
-            var filter_val = $('.filter-search-input').val();
-            $('#filter-backup').val(filter_val);
-            var form = $(this).closest("form");
-            // Submit value
-            $('input#export-list-submission').val('1');
-            $(form).submit();
+        // Gettin bika filter bar values
+        var filter_options = {};
+        var selected = '';
+        // inputs fields
+        var input_filters = $(
+            '.bika_listing_filter_bar input[name][value!=""]');
+        $(input_filters).each(function(e) {
+          filter_options[$(this).attr('name')] = $(this).val();
+        });
+        // select fields
+        var select_filters = $('.bika_listing_filter_bar select');
+        $(select_filters).each(function(e) {
+          selected = $(this).find('option:selected[value!=""]').val();
+          filter_options[$(this).attr('name')] = selected;
+        });
+
+        if (!jQuery.isEmptyObject(filter_options)) {
+          $('#filter-bar-backup').val($.toJSON(filter_options));
+        }
+
+        // Get Plone filter value and back it up.
+        var filter_val = $('.filter-search-input').val();
+        $('#filter-backup').val(filter_val);
+        var form = $(this).closest("form");
+        // Submit value
+        $('input#export-list-submission').val('1');
+        $(form).submit();
     });
 }
 

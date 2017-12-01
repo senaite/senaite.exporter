@@ -13,6 +13,7 @@
   <input id="state-filter-backup" type="hidden" name="state-filter-backup"
     tal:attributes="value python:view.get_state_filter()"/>
   <input id="filter-backup" type="hidden" name="filter-backup"/>
+  <input id="filter-bar-backup" type="hidden" name="filter-bar-backup"/>
 
   <label for="exporter-selection">Export list to:</label>
   <!-- Export format and type -->
