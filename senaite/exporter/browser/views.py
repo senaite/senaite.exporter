@@ -7,7 +7,7 @@ import json
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.interface import implements
 
-from bika.lims.interfaces import ITopLeftListingHook
+from bika.lims.interfaces import ITopLeftHTMLComponentsHook
 
 
 class ListsExporter(object):
@@ -15,7 +15,7 @@ class ListsExporter(object):
     Creates a view with the available list exporters. It gives values to the
     form elements that will be sued by the exporter.
     """
-    implements(ITopLeftListingHook)
+    implements(ITopLeftHTMLComponentsHook)
     template = ViewPageTemplateFile("templates/lists_exporters.pt")
 
     def __init__(self, listing_table):
