@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+        i18n:domain="senaite">
 <form
   name="lists-exporter"
   method="post"
@@ -15,10 +16,9 @@
   <input id="filter-backup" type="hidden" name="filter-backup"/>
   <input id="filter-bar-backup" type="hidden" name="filter-bar-backup"/>
 
-  <label for="exporter-selection">Export list to:</label>
   <!-- Export format and type -->
     <select name="exporter-selection" id="exporter-selection">
-        <option value=""></option>
+        <option value="">Export to...</option>
         <option value="csv_current_list">CSV - Only displayed items</option>
         <option value="csv_whole_list">CSV - Even not displayed</option>
         <option value="xml_current_list">XML - Only displayed items</option>
@@ -28,11 +28,6 @@
     </select>
 
   <!-- Submit button -->
-  <input
-      type="button"
-      id="export-list-submission-fake"
-      value="Export"
-  />
   <input
       type="hidden"
       id="export-list-submission"

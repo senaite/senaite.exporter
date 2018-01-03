@@ -5,7 +5,7 @@
     <adapter
       factory=".views.ListsExporter"
       for="*"
-      provides="bika.lims.interfaces.ITopLeftListingHook"
+      provides="bika.lims.interfaces.ITopLeftHTMLComponentsHook"
       name="lists_exporter"
     />
 

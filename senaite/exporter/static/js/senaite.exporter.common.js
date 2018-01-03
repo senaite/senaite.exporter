@@ -12,7 +12,7 @@ function export_submit_controller() {
     The function sets the input[name="export-list-submission"]
     value as '1'.
     */
-    $('input#export-list-submission-fake').bind('click', function () {
+    $('select#exporter-selection').change(function() {
         // Gettin bika filter bar values
         var filter_options = {};
         var selected = '';
@@ -40,6 +40,8 @@ function export_submit_controller() {
         // Submit value
         $('input#export-list-submission').val('1');
         $(form).submit();
+        // Select the default (empty) option again
+        $(this).find("option[value='']").prop('selected', true)
     });
 }
 
