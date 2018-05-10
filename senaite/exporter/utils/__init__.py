@@ -6,6 +6,7 @@ import StringIO
 import csv
 import xml.etree.ElementTree as ET
 from Acquisition import aq_inner
+from bika.lims.utils import to_utf8
 
 from zope.component import getMultiAdapter
 
@@ -112,11 +113,11 @@ def generate_xml(data):
         i = 0
         for col in row:
             col_element = ET.Element(columns[i])
-            col_element.text = col
+            col_element.text = to_utf8(str(col)).decode('utf-8')
             sub_element.append(col_element)
             i += 1
     tree = ET.ElementTree(root)
-    tree.write(output, xml_declaration=True, encoding='utf-8')
+    tree.write(output, xml_declaration=True, encoding='UTF-8')
     result = output.getvalue()
     output.close()
     return result
