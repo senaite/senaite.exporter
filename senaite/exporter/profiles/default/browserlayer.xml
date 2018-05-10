@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
 <layers>
-  <layer name="senaite"
+  <layer name="senaite.exporter"
          interface="senaite.exporter.interfaces.ISenaiteExporter" />
 </layers>
